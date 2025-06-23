@@ -1,103 +1,74 @@
-import Image from "next/image";
+import DialogDemo from '@/app/components/DialogDemo'
+import NavigationMenuDemo from './components/MainNavBar';
+import { ArrowRightIcon, ChevronRightIcon } from '@radix-ui/react-icons';
+
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <>
+    <div className='py-4'></div>
+    <div className='w-[90%] flex flex-row px-3 py-3   justify-between mx-auto items-center border-[1px] border-gray-400 rounded-3xl bg-white'>
+      <span className='text-2xl font-bold font-calsans'>
+        mIbloG
+      </span>
+      <NavigationMenuDemo />
+      <div className="flex flex-row gap-2 w-[50vh] justify-center items-center">
+        <h1 className="font-sans text-md font-medium text-black">
+          sign in
+        </h1>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+        <button className="group flex items-center gap-2 bg-black rounded-2xl px-3  py-2">
+          <span className="text-sm font-medium text-white">Get started</span>
+
+          <span className="relative w-[15px] h-[15px]">
+            <ChevronRightIcon
+            stroke='#6E6E6E'
+            className="absolute inset-0 transition-opacity duration-200  group-hover:opacity-0"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <ArrowRightIcon
+            stroke='#6E6E6E'
+              className="absolute inset-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+            />
+          </span>
+      </button>
+
+      </div>
     </div>
+  
+  <div 
+  className="w-[1140px] flex flex-row mt-16 border-[1px] bg-white border-gray-300 py-28 px-16 mx-auto rounded-md"
+  style={{ boxShadow: '8px 0 8px -4px rgba(0, 0, 0, 0.1), -8px 0 8px -4px rgba(0, 0, 0, 0.1)' }}
+>
+
+    <div className='w-[50%]'>
+      <h1 className='text-6xl font-semibold font-sans'>
+        The better way to save your notes
+      </h1> 
+      <h1 className='text-md font-light my-10 text-gray-600'>
+        A fully customizable scheduling software for individuals, businesses taking calls and developers building scheduling platforms where users meet users.
+      </h1>
+      <button className=' flex flex-row bg-black rounded-lg gap-1 items-center justify-center text-white w-[450px] p-1.5'>
+       <svg width="24px" height="24px" viewBox="-3 0 262 262" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" fill="#000000"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027" fill="#4285F4"></path><path d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1" fill="#34A853"></path><path d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782" fill="#FBBC05"></path><path d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251" fill="#EB4335"></path></g></svg>
+        <span>Sign up with Google</span>
+      </button>
+      <button   className="w-[450px] p-1.5 mt-2 text-black bg-gray-100 border border-gray-400 shadow-[inset_-1px_-1px_0_#000, inset_1px_1px_0_#fff]  rounded-lg">
+        Sign up with email
+      </button>
+      <h1 className='text-sm text-gray-600'>
+        *no credit card information required
+      </h1>
+      
+
+    </div>
+    <div className='w-[50%]'>
+      <h1 className='text-6xl font-semibold font-sans'>
+        The better way to save your notes
+      </h1>
+    </div>
+  </div>
+
+    
+    <DialogDemo/>
+    </>
   );
 }
