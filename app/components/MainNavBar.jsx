@@ -218,43 +218,34 @@ const NavigationMenuDemo = () => {
 			</Trigger>
 			<Content  className="absolute left-0 top-0 w-full sm:w-auto ">
 				<ul className="m-0 grid list-none gap-x-2.5 p-[22px] sm:w-[600px] sm:grid-flow-col sm:grid-rows-3">
-					<ListItem
-						title="Getting started"
-						href="/primitives/docs/overview/getting-started"
-					>
-						<ItemBox
-						Svg={<Todo/>}
-						header={"For Groups"}
-						context={"Stay organized together"}
-					/>
-					</ListItem>
-					<ListItem title="Styling" href="/primitives/docs/guides/styling">
-						<ItemBox
-						Svg={<Email/>}
-						header={"For Groups"}
-						context={"Stay organized together"}
-					/>
-					</ListItem>
-					<ListItem
-						title="Animation"
-						href="/primitives/docs/guides/animation"
-					>
-						<ItemBox
-						Svg={<Note/>}
-						header={"For Groups"}
-						context={"Stay organized together"}
-					/>
-					</ListItem>
-					<ListItem
-						title="Accessibility"
-						href="/primitives/docs/overview/accessibility"
-					>
-						<ItemBox
-						Svg={<Goal/>}
-						header={"For Groups"}
-						context={"Stay organized together"}
-					/>
-					</ListItem>
+					<ListItem href="/primitives/docs/overview/getting-started">
+			<ItemBox
+				Svg={<Todo />}
+				header={"Task Management"}
+				context={"Keep track of your to-dos efficiently"}
+			/>
+			</ListItem>
+			<ListItem href="/primitives/docs/guides/styling">
+			<ItemBox
+				Svg={<Email />}
+				header={"Communication"}
+				context={"Stay connected through emails"}
+			/>
+			</ListItem>
+			<ListItem href="/primitives/docs/guides/animation">
+			<ItemBox
+				Svg={<Note />}
+				header={"Notes & Documentation"}
+				context={"Capture ideas and important info"}
+			/>
+			</ListItem>
+			<ListItem href="/primitives/docs/overview/accessibility">
+			<ItemBox
+				Svg={<Goal />}
+				header={"Accessibility"}
+				context={"Design for everyone with ease"}
+			/>
+			</ListItem>
 
 
 				</ul>

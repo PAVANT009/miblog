@@ -1,5 +1,5 @@
 import DialogDemo from '@/app/components/DialogDemo'
-import NavigationMenuDemo from './components/MainNavBar';
+import NavigationMenuDemo from '../components/MainNavBar';
 import { ArrowRightIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 
 
@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
     <div className='py-4'></div>
-    <div className='w-[90%] flex flex-row px-3 py-3   justify-between mx-auto items-center border-[1px] border-gray-400 rounded-3xl bg-white'>
+    <div className='w-[90%] flex flex-row px-3 py-3  justify-between mx-auto items-center border-[1px] border-gray-400 rounded-3xl bg-white'>
       <span className='text-2xl font-bold font-calsans'>
         mIbloG
       </span>
@@ -36,7 +36,7 @@ export default function Home() {
     </div>
   
   <div 
-  className="w-[1140px] flex flex-row mt-16 border-[1px] bg-white border-gray-300 py-28 px-16 mx-auto rounded-md"
+  className="w-[1140px] flex flex-row mt-16 border-[1px] bg-white border-gray-300 py-28 px-16 mx-auto rounded-2xl"
   style={{ boxShadow: '8px 0 8px -4px rgba(0, 0, 0, 0.1), -8px 0 8px -4px rgba(0, 0, 0, 0.1)' }}
 >
 
