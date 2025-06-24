@@ -5,7 +5,7 @@ import "../globals.css";
 
 export default function NotesLayout({ children }) {
   return (
-    <section className='bg-white'>
+    <section className='bg-red-800 w-screen h-[80vh]'>
       <main>
         {children}
       </main>
