@@ -20,6 +20,12 @@ export default function Pagesfacecard({initialTitle,first20Words}) {
           <p className="text-sm text-gray-600 leading-relaxed">
             {first20Words}
           </p>
+          <div>
+        <textarea
+        name="email-list"
+        className="w-full h-40 resize-none p-4 mt-7 rounded-md bg-amber-50 outline-none  focus:ring-2 focus:ring-amber-200 transition-all duration-200"
+        />
+          </div>
         </div>
   )
 }

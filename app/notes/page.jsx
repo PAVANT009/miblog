@@ -2,39 +2,22 @@
 
 import React, { useRef, useState, useEffect } from 'react'
 import Pagesfacecard from '../components/Pagesfacecard'
+import { GroupIcon, PaperPlaneIcon, RowsIcon } from '@radix-ui/react-icons'
+import EditableLineInput from '../components/EditableLineInput'
+import EditableTextArea from '../components/EditableTextArea'
 
 const initialTitle = 'Digital Transformation'
 const initialSubj =
   "In today's fast-paced world, digital transformation is reshaping the way businesses operate and deliver value to customers. It involves integrating digital technology into all areas of a business, fundamentally changing how you operate and deliver value to customers. It also requires cultural change that challenges the status quo, experiments often, and gets comfortable with failure."
 
 const first20Words = initialSubj.split(' ').slice(0, 20).join(' ') + ' ....'
-const maxslots = 100
 
-// ✅ Chunk based on character length (respects maxslots)
-const chunkByCharLength = (text, maxChars) => {
-  const words = text.split(' ')
-  const result = []
-  let currentLine = ''
-
-  for (const word of words) {
-    if ((currentLine + ' ' + word).trim().length <= maxChars) {
-      currentLine = (currentLine + ' ' + word).trim()
-    } else {
-      result.push(currentLine)
-      currentLine = word
-    }
-  }
-
-  if (currentLine) result.push(currentLine)
-  return result
-}
-
-export default function Page() {
-  const [header, setHeader] = useState(initialTitle)
+export default function MainPage() {
   const spanRef = useRef(null)
+  const [header, setHeader] = useState(initialTitle)
   const [inputWidth, setInputWidth] = useState(150)
-  const [inputs, setInputs] = useState(() => chunkByCharLength(initialSubj, maxslots))
-  const inputRefs = useRef([])
+  const [text, setText] = useState(initialSubj)
+  const [mode, setMode] = useState('line')
 
   useEffect(() => {
     if (spanRef.current) {
@@ -42,93 +25,8 @@ export default function Page() {
     }
   }, [header])
 
-  useEffect(() => {
-    const lastInput = inputRefs.current[inputs.length - 1]
-    if (lastInput) lastInput.focus()
-  }, [inputs.length])
-
-  const moveCaretToEnd = (el) => {
-    const length = el.value.length
-    el.setSelectionRange(length, length)
-    el.focus()
-  }
-
-  const moveCaretToStart = (el) => {
-    el.setSelectionRange(0, 0)
-    el.focus()
-  }
-
-  const handleChange = (index, e) => {
-    const inputEl = e.target
-    const cursorPos = inputEl.selectionStart
-    const newValue = inputEl.value
-    const isCaretAtEnd = cursorPos === newValue.length
-
-    const newInputs = [...inputs]
-
-    if (newValue.length <= maxslots) {
-      newInputs[index] = newValue
-    } else {
-      let currentLine = newValue.slice(0, maxslots)
-      let overflowText = newValue.slice(maxslots)
-
-      if (currentLine.length === maxslots && newValue[maxslots] !== ' ') {
-        const lastSpaceIndex = currentLine.lastIndexOf(' ')
-        if (lastSpaceIndex > maxslots * 0.7) {
-          overflowText = newValue.slice(lastSpaceIndex)
-          currentLine = newValue.slice(0, lastSpaceIndex)
-        }
-      }
-
-      newInputs[index] = currentLine
-
-      let i = index + 1
-      while (overflowText.length > 0) {
-        const nextLine = newInputs[i] || ''
-        const combinedText = overflowText + nextLine
-
-        if (combinedText.length <= maxslots) {
-          newInputs[i] = combinedText
-          overflowText = ''
-        } else {
-          let lineText = combinedText.slice(0, maxslots)
-          let remaining = combinedText.slice(maxslots)
-
-          if (lineText.length === maxslots && combinedText[maxslots] !== ' ') {
-            const lastSpaceIndex = lineText.lastIndexOf(' ')
-            if (lastSpaceIndex > maxslots * 0.7) {
-              remaining = combinedText.slice(lastSpaceIndex)
-              lineText = combinedText.slice(0, lastSpaceIndex)
-            }
-          }
-
-          if (newInputs[i]) {
-            newInputs[i] = lineText
-          } else {
-            newInputs.push(lineText)
-          }
-
-          overflowText = remaining
-        }
-        i++
-      }
-    }
-
-    setInputs(newInputs)
-
-    // ✅ Cursor stays where it was (or goes to end of current line) — no jump unless you do it
-    setTimeout(() => {
-      const el = inputRefs.current[index]
-      if (el) {
-        const pos = Math.min(cursorPos, newInputs[index].length)
-        el.focus()
-        el.setSelectionRange(pos, pos)
-      }
-    }, 0)
-  }
-
   return (
-    <div className="bg-white pt-24 pb-13 font-sans">
+    <div className="bg-white  pt-24 pb-18 font-sans">
       <div className="flex flex-row w-[90%] h-[80vh] mx-auto border border-gray-300 rounded-xl shadow-lg overflow-hidden">
         <Pagesfacecard initialTitle={initialTitle} first20Words={first20Words} />
 
@@ -151,101 +49,53 @@ export default function Page() {
             </span>
           </div>
 
-          <div className="flex flex-col gap-5">
-            {inputs.map((value, index) => (
-              <input
-                key={index}
-                type="text"
-                value={value}
-                ref={(el) => (inputRefs.current[index] = el)}
-                onChange={(e) => handleChange(index, e)}
-                onKeyDown={(e) => {
-                  const caretPos = e.currentTarget.selectionStart
-                  const atStart = caretPos === 0
-                  const atEnd = caretPos === value.length
+          <div className="w-full flex flex-row justify-end space-x-1 p-2 bg-white">
 
-                  if (e.key === 'ArrowUp' && index > 0) {
-                    e.preventDefault()
-                    moveCaretToEnd(inputRefs.current[index - 1])
-                  }
-
-                  if (e.key === 'ArrowDown' && index < inputs.length - 1) {
-                    e.preventDefault()
-                    moveCaretToStart(inputRefs.current[index + 1])
-                  }
-
-                  if ((e.key === 'Backspace' || e.key === 'ArrowLeft') && atStart && index > 0) {
-                    e.preventDefault()
-                    moveCaretToEnd(inputRefs.current[index - 1])
-                  }
-
-                  if (e.key === 'ArrowRight' && atEnd && index < inputs.length - 1) {
-                    e.preventDefault()
-                    moveCaretToStart(inputRefs.current[index + 1])
-                  }
-
-                  if (e.key === 'Enter') {
-                    e.preventDefault()
-                    const cursorPos = caretPos
-                    const currentText = inputs[index]
-                    const before = currentText.slice(0, cursorPos)
-                    const after = currentText.slice(cursorPos)
-
-                    const newInputs = [...inputs]
-                    newInputs[index] = before
-                    newInputs.splice(index + 1, 0, after)
-
-                    setInputs(newInputs)
-
-                    setTimeout(() => {
-                      inputRefs.current[index + 1]?.focus()
-                      inputRefs.current[index + 1]?.setSelectionRange(0, 0)
-                    }, 0)
-                  }
-
-                  if (e.key === 'Backspace' && value === '' && index < inputs.length - 1) {
-                    e.preventDefault()
-                    const newInputs = [...inputs]
-                    newInputs.splice(index, 1)
-                    setInputs(newInputs)
-                    setTimeout(() => {
-                      moveCaretToEnd(inputRefs.current[index - 1] || inputRefs.current[0])
-                    }, 0)
-                  }
-
-                  if (
-                    e.key === 'Backspace' &&
-                    atStart &&
-                    index > 0 &&
-                    inputs[index].length > 0
-                  ) {
-                    e.preventDefault()
-                    const currentText = inputs[index]
-                    const prevInput = inputs[index - 1]
-                    const prevLength = prevInput.length
-                    const maxMove = maxslots - prevLength
-
-                    if (maxMove > 0) {
-                      const moveLength = Math.min(currentText.length, maxMove)
-                      const textToMove = currentText.slice(0, moveLength)
-                      const remainingText = currentText.slice(moveLength)
-
-                      const newInputs = [...inputs]
-                      newInputs[index - 1] = prevInput + textToMove
-                      newInputs[index] = remainingText
-                      setInputs(newInputs)
-
-                      setTimeout(() => {
-                        moveCaretToEnd(inputRefs.current[index - 1])
-                      }, 0)
-                    }
-                  }
-                }}
-                className="w-full p-2 border-b-[1px] outline-none border-b-gray-200 focus:border-b-amber-500"
-                style={{ whiteSpace: 'pre' }}
+          <div className="flex gap-2">
+            <div
+              onClick={() => setMode('line')}
+              className={`group cursor-pointer p-2 border rounded-md transition-all duration-300
+                ${
+                  mode === 'line'
+                    ? 'border-amber-600 bg-amber-100 shadow-[0_0_3px_2px_rgba(245,158,11,0.5)]'
+                    : 'border-amber-400 hover:bg-amber-100 hover:shadow-[0_0_10px_2px_rgba(245,158,11,0.3)]'
+                }`}
+            >
+              <RowsIcon
+                className={`text-amber-600 transition-transform duration-300 ${
+                  mode !== 'line' ? 'group-hover:scale-110 group-hover:-rotate-3' : ''
+                }`}
               />
-            ))}
+            </div>
+
+            <div
+              onClick={() => setMode('group')}
+              className={`group cursor-pointer p-2 border rounded-md transition-all duration-300
+                ${
+                  mode === 'group'
+                    ? 'border-amber-600 bg-amber-100 shadow-[0_0_3px_2px_rgba(245,158,11,0.5)]'
+                    : 'border-amber-400 hover:bg-amber-100 hover:shadow-[0_0_10px_2px_rgba(245,158,11,0.3)]'
+                }`}
+            >
+              <GroupIcon
+                className={`text-amber-600 transition-transform duration-300 ${
+                  mode !== 'group' ? 'group-hover:scale-110 group-hover:-rotate-3' : ''
+                }`}
+              />
+            </div>
+        </div>
           </div>
+          {mode === 'line' ? (
+            <EditableLineInput initialText={text} onTextChange={setText} />
+          ) : (
+            <EditableTextArea value={text} onChange={setText}/>
+          )}
+        <div className="fixed bottom-24 right-20 z-50">
+          <button className="group bg-amber-600 hover:bg-amber-700 cursor-pointer active:bg-amber-800 text-white px-6 py-3 rounded-2xl flex items-center gap-2 shadow-lg transition duration-300 ease-in-out">
+            <span className="font-medium text-sm">Send</span>
+            <PaperPlaneIcon className="w-4 h-4 transform transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
+          </button>
+        </div>
         </div>
       </div>
     </div>
