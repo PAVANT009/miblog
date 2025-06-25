@@ -1,22 +1,31 @@
 'use client'
 
 import React, { useRef, useState, useEffect } from 'react'
-import Image from 'next/image'
-import face from '@/public/images/face.jpg'
+import Pagesfacecard from '../components/Pagesfacecard'
 
 const initialTitle = 'Digital Transformation'
 const initialSubj =
   "In today's fast-paced world, digital transformation is reshaping the way businesses operate and deliver value to customers. It involves integrating digital technology into all areas of a business, fundamentally changing how you operate and deliver value to customers. It also requires cultural change that challenges the status quo, experiments often, and gets comfortable with failure."
 
 const first20Words = initialSubj.split(' ').slice(0, 20).join(' ') + ' ....'
+const maxslots = 100
 
-// Helper function to chunk words
-const chunkWords = (str, chunkSize) => {
-  const words = str.split(' ')
+// ✅ Chunk based on character length (respects maxslots)
+const chunkByCharLength = (text, maxChars) => {
+  const words = text.split(' ')
   const result = []
-  for (let i = 0; i < words.length; i += chunkSize) {
-    result.push(words.slice(i, i + chunkSize).join(' '))
+  let currentLine = ''
+
+  for (const word of words) {
+    if ((currentLine + ' ' + word).trim().length <= maxChars) {
+      currentLine = (currentLine + ' ' + word).trim()
+    } else {
+      result.push(currentLine)
+      currentLine = word
+    }
   }
+
+  if (currentLine) result.push(currentLine)
   return result
 }
 
@@ -24,10 +33,8 @@ export default function Page() {
   const [header, setHeader] = useState(initialTitle)
   const spanRef = useRef(null)
   const [inputWidth, setInputWidth] = useState(150)
-  const [inputs, setInputs] = useState(() => chunkWords(initialSubj, 10))
+  const [inputs, setInputs] = useState(() => chunkByCharLength(initialSubj, maxslots))
   const inputRefs = useRef([])
-
-  const maxslots = 100
 
   useEffect(() => {
     if (spanRef.current) {
@@ -40,13 +47,6 @@ export default function Page() {
     if (lastInput) lastInput.focus()
   }, [inputs.length])
 
-  const handleChange = (index, e) => {
-    const newValue = e.target.value
-    const newInputs = [...inputs]
-    newInputs[index] = newValue
-    setInputs(newInputs)
-  }
-
   const moveCaretToEnd = (el) => {
     const length = el.value.length
     el.setSelectionRange(length, length)
@@ -58,25 +58,79 @@ export default function Page() {
     el.focus()
   }
 
+  const handleChange = (index, e) => {
+    const inputEl = e.target
+    const cursorPos = inputEl.selectionStart
+    const newValue = inputEl.value
+    const isCaretAtEnd = cursorPos === newValue.length
+
+    const newInputs = [...inputs]
+
+    if (newValue.length <= maxslots) {
+      newInputs[index] = newValue
+    } else {
+      let currentLine = newValue.slice(0, maxslots)
+      let overflowText = newValue.slice(maxslots)
+
+      if (currentLine.length === maxslots && newValue[maxslots] !== ' ') {
+        const lastSpaceIndex = currentLine.lastIndexOf(' ')
+        if (lastSpaceIndex > maxslots * 0.7) {
+          overflowText = newValue.slice(lastSpaceIndex)
+          currentLine = newValue.slice(0, lastSpaceIndex)
+        }
+      }
+
+      newInputs[index] = currentLine
+
+      let i = index + 1
+      while (overflowText.length > 0) {
+        const nextLine = newInputs[i] || ''
+        const combinedText = overflowText + nextLine
+
+        if (combinedText.length <= maxslots) {
+          newInputs[i] = combinedText
+          overflowText = ''
+        } else {
+          let lineText = combinedText.slice(0, maxslots)
+          let remaining = combinedText.slice(maxslots)
+
+          if (lineText.length === maxslots && combinedText[maxslots] !== ' ') {
+            const lastSpaceIndex = lineText.lastIndexOf(' ')
+            if (lastSpaceIndex > maxslots * 0.7) {
+              remaining = combinedText.slice(lastSpaceIndex)
+              lineText = combinedText.slice(0, lastSpaceIndex)
+            }
+          }
+
+          if (newInputs[i]) {
+            newInputs[i] = lineText
+          } else {
+            newInputs.push(lineText)
+          }
+
+          overflowText = remaining
+        }
+        i++
+      }
+    }
+
+    setInputs(newInputs)
+
+    // ✅ Cursor stays where it was (or goes to end of current line) — no jump unless you do it
+    setTimeout(() => {
+      const el = inputRefs.current[index]
+      if (el) {
+        const pos = Math.min(cursorPos, newInputs[index].length)
+        el.focus()
+        el.setSelectionRange(pos, pos)
+      }
+    }, 0)
+  }
+
   return (
     <div className="bg-white pt-24 pb-13 font-sans">
       <div className="flex flex-row w-[90%] h-[80vh] mx-auto border border-gray-300 rounded-xl shadow-lg overflow-hidden">
-        <div className="w-[30%] bg-gradient-to-br from-gray-100 to-gray-200 px-10 py-12 border-r border-gray-300">
-          <Image
-            alt="face-icon"
-            src={face}
-            className="w-[60px] h-[60px] rounded-full mb-4"
-          />
-          <h2 className="text-sm text-gray-500 mb-1 capitalize tracking-wide">
-            Joe Goldberg
-          </h2>
-          <h1 className="text-2xl font-semibold text-gray-800 mb-2">
-            {initialTitle}
-          </h1>
-          <p className="text-sm text-gray-600 leading-relaxed">
-            {first20Words}
-          </p>
-        </div>
+        <Pagesfacecard initialTitle={initialTitle} first20Words={first20Words} />
 
         <div className="flex flex-col gap-6 px-8 py-10 w-full overflow-y-auto overflow-x-hidden custom-scrollbar">
           <div className="relative w-fit">
@@ -102,7 +156,6 @@ export default function Page() {
               <input
                 key={index}
                 type="text"
-                maxLength={maxslots}
                 value={value}
                 ref={(el) => (inputRefs.current[index] = el)}
                 onChange={(e) => handleChange(index, e)}
@@ -115,16 +168,13 @@ export default function Page() {
                     e.preventDefault()
                     moveCaretToEnd(inputRefs.current[index - 1])
                   }
+
                   if (e.key === 'ArrowDown' && index < inputs.length - 1) {
                     e.preventDefault()
                     moveCaretToStart(inputRefs.current[index + 1])
                   }
 
-                  if (
-                    (e.key === 'Backspace' || e.key === 'ArrowLeft') &&
-                    atStart &&
-                    index > 0
-                  ) {
+                  if ((e.key === 'Backspace' || e.key === 'ArrowLeft') && atStart && index > 0) {
                     e.preventDefault()
                     moveCaretToEnd(inputRefs.current[index - 1])
                   }
@@ -153,6 +203,16 @@ export default function Page() {
                     }, 0)
                   }
 
+                  if (e.key === 'Backspace' && value === '' && index < inputs.length - 1) {
+                    e.preventDefault()
+                    const newInputs = [...inputs]
+                    newInputs.splice(index, 1)
+                    setInputs(newInputs)
+                    setTimeout(() => {
+                      moveCaretToEnd(inputRefs.current[index - 1] || inputRefs.current[0])
+                    }, 0)
+                  }
+
                   if (
                     e.key === 'Backspace' &&
                     atStart &&
@@ -160,39 +220,19 @@ export default function Page() {
                     inputs[index].length > 0
                   ) {
                     e.preventDefault()
-
-                    const currentWords = inputs[index].trim().split(' ')
+                    const currentText = inputs[index]
                     const prevInput = inputs[index - 1]
                     const prevLength = prevInput.length
+                    const maxMove = maxslots - prevLength
 
-                    let movedWords = []
-                    let movedLength = 0
-
-                    for (let i = 0; i < currentWords.length; i++) {
-                      const word = currentWords[i]
-                      const space = movedWords.length > 0 ? 1 : 0
-                      const wordLength = word.length + space
-                      if (prevLength + movedLength + wordLength <= maxslots) {
-                        movedWords.push(word)
-                        movedLength += wordLength
-                      } else {
-                        break
-                      }
-                    }
-
-                    if (movedWords.length > 0) {
-                      const newPrev = (
-                        prevInput +
-                        ' ' +
-                        movedWords.join(' ')
-                      ).trim()
-                      const newCurrent = currentWords
-                        .slice(movedWords.length)
-                        .join(' ')
+                    if (maxMove > 0) {
+                      const moveLength = Math.min(currentText.length, maxMove)
+                      const textToMove = currentText.slice(0, moveLength)
+                      const remainingText = currentText.slice(moveLength)
 
                       const newInputs = [...inputs]
-                      newInputs[index - 1] = newPrev
-                      newInputs[index] = newCurrent
+                      newInputs[index - 1] = prevInput + textToMove
+                      newInputs[index] = remainingText
                       setInputs(newInputs)
 
                       setTimeout(() => {
@@ -202,6 +242,7 @@ export default function Page() {
                   }
                 }}
                 className="w-full p-2 border-b-[1px] outline-none border-b-gray-200 focus:border-b-amber-500"
+                style={{ whiteSpace: 'pre' }}
               />
             ))}
           </div>
