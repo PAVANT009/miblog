@@ -1,9 +1,11 @@
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 import face from '@/public/images/face.jpg'
+import DynamicInputs from './DynamicInputs'
 
 
 export default function Pagesfacecard({initialTitle,first20Words}) {
+
   return (
         <div className="w-[30%] bg-gradient-to-br from-gray-100 to-gray-200 px-10 py-12 border-r border-gray-300">
           <Image
@@ -20,12 +22,12 @@ export default function Pagesfacecard({initialTitle,first20Words}) {
           <p className="text-sm text-gray-600 leading-relaxed">
             {first20Words}
           </p>
-          <div>
-        <textarea
-        name="email-list"
-        className="w-full h-40 resize-none p-4 mt-7 rounded-md bg-amber-50 outline-none  focus:ring-2 focus:ring-amber-200 transition-all duration-200"
-        />
-          </div>
+          <div
+          name="email-list"
+  className="w-full h-50 resize-none p-4 mt-7 rounded-md bg-amber-50 outline-none focus:ring-2 focus:ring-amber-200 transition-all duration-200">
+            <DynamicInputs/>
+
+        </div>
         </div>
   )
 }

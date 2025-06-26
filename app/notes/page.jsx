@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from 'react'
 import Pagesfacecard from '../components/Pagesfacecard'
-import { GroupIcon, PaperPlaneIcon, RowsIcon } from '@radix-ui/react-icons'
+import { PaperPlaneIcon, RowsIcon, SquareIcon } from '@radix-ui/react-icons'
 import EditableLineInput from '../components/EditableLineInput'
 import EditableTextArea from '../components/EditableTextArea'
 
@@ -17,7 +17,7 @@ export default function MainPage() {
   const [header, setHeader] = useState(initialTitle)
   const [inputWidth, setInputWidth] = useState(150)
   const [text, setText] = useState(initialSubj)
-  const [mode, setMode] = useState('line')
+  const [mode, setMode] = useState('group')
 
   useEffect(() => {
     if (spanRef.current) {
@@ -77,7 +77,7 @@ export default function MainPage() {
                     : 'border-amber-400 hover:bg-amber-100 hover:shadow-[0_0_10px_2px_rgba(245,158,11,0.3)]'
                 }`}
             >
-              <GroupIcon
+              <SquareIcon
                 className={`text-amber-600 transition-transform duration-300 ${
                   mode !== 'group' ? 'group-hover:scale-110 group-hover:-rotate-3' : ''
                 }`}
