@@ -1,8 +1,7 @@
-// EmailToast.js
 import * as React from "react";
 import { Toast } from "radix-ui";
 
-export default function EmailToast({ open, setOpen, message }) {
+export default function  Toaste({ open, setOpen, message }) {
 	const timerRef = React.useRef(0);
 
 	React.useEffect(() => {

@@ -1,5 +1,3 @@
-import Person from "./svg/person";
-
 export default function ItemBox({header,context,Svg}) {
     const r = 3;
     const crcol = "#d1d5db";

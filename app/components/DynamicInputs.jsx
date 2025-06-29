@@ -1,6 +1,6 @@
 import { Cross2Icon, MinusIcon } from "@radix-ui/react-icons";
 import React, { useState } from "react";
-import EmailToast from "./EmailToast.jsx"; // import toast component
+import Toast from "./EmailToast.jsx"; 
 
 function DynamicInputs() {
 	const [inputs, setInputs] = useState([]);
@@ -77,7 +77,7 @@ function DynamicInputs() {
 			</div>
 
 			{/* Toast notification */}
-			<EmailToast open={toastOpen} setOpen={setToastOpen} message={toastMessage} />
+			<Toast open={toastOpen} setOpen={setToastOpen} message={toastMessage} />
 		</>
 	);
 }
