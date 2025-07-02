@@ -74,22 +74,22 @@ export default function Home() {
         <HoverInfoBox
           shortHeader="Privacy first"
           descriptionText="We don`t store user data. Everything stays on-device."
-          Svg={<ShieldSecureIcon className="w-5 h-5 m-[14px] text-gray-600" />}
+          Svg={<ShieldSecureIcon className="w-6 h-6 m-[14px] text-gray-600" />}
         />
         <HoverInfoBox
           shortHeader="65+ languages"
           descriptionText="Your content, instantly translated into 65+ languages, globally accessible."
-          Svg={<CustomIcon className="w-5 h-5 m-[14px] text-gray-600" />}
+          Svg={<CustomIcon className="w-6 h-6 m-[14px] text-gray-600" />}
         />
         <HoverInfoBox
           shortHeader="Easy embeds"
           descriptionText="Drop in widgets anywhere. No code stress, no drama."
-          Svg={<DirectionalArrowsIcon className="w-5 h-5 m-[14px] text-gray-600" />}
+          Svg={<DirectionalArrowsIcon className="w-6 h-6 m-[14px] text-gray-600" />}
         />
         <HoverInfoBox
-          shortHeader="Simple customizations"
+          shortHeader="Simple Layout"
           descriptionText="Tweak layout, fonts, colors—your style, your rules."
-          Svg={<AddCategoriesIcon className="w-5 h-5 m-[14px] text-gray-600" />}
+          Svg={<AddCategoriesIcon className="w-6 h-6 m-[14px] text-gray-600" />}
         />
       </div>
     </div>

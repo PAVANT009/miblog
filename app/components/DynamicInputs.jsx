@@ -1,49 +1,55 @@
-import { Cross2Icon, MinusIcon } from "@radix-ui/react-icons";
-import React, { useState } from "react";
-import Toast from "./EmailToast.jsx"; 
+'use client'
 
-function DynamicInputs() {
-	const [inputs, setInputs] = useState([]);
-	const [currentInput, setCurrentInput] = useState("");
-	const [toastOpen, setToastOpen] = useState(false);
-	const [toastMessage, setToastMessage] = useState("");
+import { Cross2Icon, MinusIcon } from "@radix-ui/react-icons"
+import React, { useState } from "react"
+import EmailToast from "./EmailToast.jsx"
+
+function DynamicInputs({ setEmails }) {
+	const [inputs, setInputs] = useState([])
+	const [currentInput, setCurrentInput] = useState("")
+	const [toastOpen, setToastOpen] = useState(false)
+	const [toastMessage, setToastMessage] = useState("")
 
 	const chipColors = [
 		"#3DD68C", "#FFFF57", "#57C7FF", "#FFA657", "#FF57A6",
 		"#A457FF", "#57FFCA", "#FFD157", "#5EFFE7",
-	];
+	]
 
 	const isValidEmail = (email) =>
-		/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+		/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
 	const handleKeyDown = (e) => {
 		if ((e.key === "Enter" || e.key === ",") && currentInput.trim() !== "") {
-			e.preventDefault();
-			const trimmed = currentInput.trim();
+			e.preventDefault()
+			const trimmed = currentInput.trim()
+
 			if (!isValidEmail(trimmed)) {
-				setToastMessage(`"${trimmed}" is not a valid email.`);
-				setToastOpen(true);
-				return;
+				setToastMessage(`"${trimmed}" is not a valid email.`)
+				setToastOpen(true)
+				return
 			}
 			if (!inputs.includes(trimmed)) {
-				setInputs([...inputs, trimmed]);
+				const updated = [...inputs, trimmed]
+				setInputs(updated)
+				setEmails && setEmails(updated)
 			}
-			setCurrentInput("");
+			setCurrentInput("")
 		}
-	};
+	}
 
 	const removeInput = (index) => {
-		const updated = [...inputs];
-		updated.splice(index, 1);
-		setInputs(updated);
-	};
+		const updated = [...inputs]
+		updated.splice(index, 1)
+		setInputs(updated)
+		setEmails && setEmails(updated)
+	}
 
 	return (
 		<>
 			<div className="max-h-40 overflow-y-auto flex flex-wrap gap-2 pr-1">
 				{inputs.map((value, index) => {
-					const bgColor = chipColors[index % chipColors.length];
-					const textColor = bgColor === "#FFFF57" ? "text-black" : "text-white";
+					const bgColor = chipColors[index % chipColors.length]
+					const textColor = bgColor === "#FFFF57" ? "text-black" : "text-white"
 
 					return (
 						<div
@@ -63,7 +69,7 @@ function DynamicInputs() {
 								</div>
 							</button>
 						</div>
-					);
+					)
 				})}
 
 				<input
@@ -76,10 +82,13 @@ function DynamicInputs() {
 				/>
 			</div>
 
-			{/* Toast notification */}
-			<Toast open={toastOpen} setOpen={setToastOpen} message={toastMessage} />
+			<EmailToast
+				open={toastOpen}
+				setOpen={setToastOpen}
+				message={toastMessage}
+			/>
 		</>
-	);
+	)
 }
 
-export default DynamicInputs;
+export default DynamicInputs
