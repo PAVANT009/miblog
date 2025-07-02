@@ -8,7 +8,7 @@ export default function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [, setError] = useState("");
   const router = useRouter();
 
   const handleEmailAuth = async (e: React.FormEvent) => {
